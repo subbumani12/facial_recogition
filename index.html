@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32 LOGIN</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url('bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            overflow: hidden;
+            background-color: black;
+            color: white;
+            font-size: 25px;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            margin-top: 250px;
+        }
+        input {
+            padding: 10px;
+            margin: 10px;
+            width: 200px;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            padding: 10px;
+            width: 220px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Welcome, Login to your Security System</h2>
+        <input type = "text" id="username" placeholder="Username"><br>
+        <input type="text" id="pin" placeholder="PIN"><br>
+        <button onclick="login()">Login</button>
+        <p id="error-message" style="color: red;"></p>
+    </div>
+    <script>
+        function login() {
+            const username = document.getElementById("username").value;
+            const pin = document.getElementById("pin").value;
+            const validUsername = "subbu";
+            const validPin = "1234";
+            if (username==validUsername && pin==validPin) {
+                localStorage.setItem("loggedIn", "true");
+                window.location.href="auth.html";
+            }
+            else if (username==validUsername && pin!=validPin) {
+                document.getElementById("error-message").innerText = "Invalid PIN";
+            }
+            else if (username!=validUsername && pin==validPin) {
+                document.getElementById("error-message").innerText = "Invalid Username";
+            }
+            else {
+                document.getElementById("error-message").innerText = "Invalid Username and Password";
+            }
+            document.addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    login();
+                }
+            });
+        }
+    </script>
+</body>
+</html>

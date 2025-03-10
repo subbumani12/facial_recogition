@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Security System</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: white;
+        }
+        .navbar {
+            display: flex;
+            justify-content: center;
+            background-color: #007BFF;
+            padding: 15px;
+        }
+        .navbar button {
+            margin: 5px;
+            padding: 15px;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .code-box {
+            font-size: 24px;
+            font-weight: bold;
+            padding: 20px;
+            background-color: black;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .container {
+            margin-top: 80px;
+        }
+        .timer {
+            font-size: 30px;
+            margin-top: 50px;
+        }
+        .digit-button {
+            padding: 15px;
+            margin: 10px;
+            background-color: white;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <button onclick="goToAuth()">AuthCode</button>
+        <button onclick="goToStream()">Video Stream</button>
+        <button onclick="logout()">Logout</button>
+    </div>
+    <div class="container" id="authContainer">
+        <h2>Your AuthCode</h2>
+        <div id="authCode" class="code-box">
+            <span id="digit1" class="digit-button">-</span>
+            <span id="digit2" class="digit-button">-</span>
+            <span id="digit3" class="digit-button">-</span>
+            <span id="digit4" class="digit-button">-</span>
+            <span id="digit5" class="digit-button">-</span>
+            <span id="digit6" class="digit-button">-</span>
+        </div>
+        <div id="timer" class="timer">60</div>
+    </div>
+    <script>
+        if(localStorage.getItem("loggedIn") !== "true") {
+            window.location.href = "index.html";
+        }
+        let timerValue = localStorage.getItem("timerValue") ? parseInt(localStorage.getItem("timerValue")) : 60;
+        const timerElement = document.getElementById("timer");
+        const authCodeElements = [
+            document.getElementById("digit1"),
+            document.getElementById("digit2"),
+            document.getElementById("digit3"),
+            document.getElementById("digit4"),
+            document.getElementById("digit5"),
+            document.getElementById("digit6")
+        ];
+        function generateCode() {
+            let code = Math.floor(100000 + Math.random() * 900000).toString();
+            for (let i = 0; i < 6; i++) {
+                authCodeElements[i].innerText = code[i];
+            }
+            localStorage.setItem("authCode", code); 
+            resetTimer(); 
+        }
+        function resetTimer() {
+            timerValue = 60; 
+            timerElement.innerText = timerValue;
+            localStorage.setItem("timerValue", timerValue); 
+        }
+        function updateTimer() {
+            if (timerValue > 0) {
+                timerValue--;
+                timerElement.innerText = timerValue; 
+                localStorage.setItem("timerValue", timerValue); 
+            } else {
+                generateCode(); 
+            }
+        }
+        function goToAuth() {
+            window.location.href = "auth.html";
+        }
+        function goToStream() {
+            window.location.href = "stream.html";
+        }
+        function logout() {
+            localStorage.removeItem("loggedIn");
+            localStorage.removeItem("authCode");
+            localStorage.removeItem("timerValue");
+            window.location.href = "index.html";
+        }
+        if (localStorage.getItem("authCode")) {
+            const code = localStorage.getItem("authCode");
+            for (let i = 0; i < 6; i++) {
+                authCodeElements[i].innerText = code[i];
+            }
+        } else {
+            generateCode();
+        }
+        timerElement.innerText = timerValue; 
+        setInterval(updateTimer, 1000); 
+    </script>
+</body>
+</html>
