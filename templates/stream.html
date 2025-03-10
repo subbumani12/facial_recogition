@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Security System</title>
     <style>
         body {
@@ -26,24 +25,14 @@
             border-radius: 5px;
             cursor: pointer;
         }
-        .container {
-            margin-top: 50px;
-        }
-        .code-box {
-            font-size: 24px;
-            font-weight: bold;
-            padding: 20px;
-            background-color: #007BFF;
-            border-radius: 10px;
-            display: inline-block;
-        }
         h1 {
             margin-top: 30px;
         }
         #videoStream {
             border: 2px solid white;
             margin-top: 10px;
-            transform: scaleX(-1); /* Flip the video horizontally */
+            /* Remove or comment out the transform to disable mirroring */
+            /* transform: scaleX(-1); */
         }
         button {
             padding: 10px;
@@ -63,18 +52,20 @@
         <button onclick="logout()">Logout</button>
     </div>
     <h1>Security Camera Live Stream</h1>
-    <img id="videoStream" src="http://localhost:5000/video_feed" width="640" height="480" alt="Live Stream">
+    <!-- Use the Flask video feed -->
+    <img id="videoStream" src="/video_feed" width="640" height="480" alt="Live Stream">
     <br>
     <script>
+        // Redirect if not logged in
         if(localStorage.getItem("loggedIn") !== "true") {
-            window.location.href = "index.html";
+            window.location.href = "/";
         }
         function goToAuth() {
-            window.location.href = "auth.html";
+            window.location.href = "/auth";
         }
         function logout() {
             localStorage.removeItem("loggedIn");
-            window.location.href = "index.html";
+            window.location.href = "/";
         }
     </script>
 </body>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home Security System</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial, sans-serif;
+      background-color: black;
+      color: white;
+    }
+    .navbar {
+      display: flex;
+      justify-content: center;
+      background-color: #007BFF;
+      padding: 15px;
+    }
+    .navbar button {
+      margin: 5px;
+      padding: 15px;
+      background-color: black;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .code-box {
+      font-size: 48px;
+      font-weight: bold;
+      padding: 20px;
+      background-color: black;
+      border-radius: 10px;
+      display: inline-block;
+      margin-top: 20px;
+    }
+    .container {
+      margin-top: 80px;
+    }
+    .timer {
+      font-size: 30px;
+      margin-top: 50px;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <button onclick="goToAuth()">AuthCode</button>
+    <button onclick="goToStream()">Video Stream</button>
+    <button onclick="logout()">Logout</button>
+  </div>
+  <div class="container" id="authContainer">
+    <h2>Your AuthCode</h2>
+    <div id="authCode" class="code-box">------</div>
+    <div id="timer" class="timer">30</div>
+  </div>
+  <script>
+    // Redirect if not logged in
+    if (localStorage.getItem("loggedIn") !== "true") {
+      window.location.href = "/";
+    }
+
+    function goToAuth() {
+      window.location.href = "/auth";
+    }
+    function goToStream() {
+      window.location.href = "/stream";
+    }
+    function logout() {
+      localStorage.removeItem("loggedIn");
+      localStorage.removeItem("authCode");
+      localStorage.removeItem("timerValue");
+      window.location.href = "/";
+    }
+
+    function updateAuthCode() {
+      fetch('/authcode')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById("authCode").innerText = data.authcode;
+        })
+        .catch(error => console.error("Error fetching auth code:", error));
+    }
+
+    // Timer to refresh the code every 30s
+    let timerValue = 30;
+    const timerElement = document.getElementById("timer");
+    function updateTimer() {
+      if (timerValue > 0) {
+        timerValue--;
+        timerElement.innerText = timerValue;
+      } else {
+        timerValue = 30;
+        updateAuthCode();
+      }
+    }
+
+    // Initial load
+    updateAuthCode();
+    setInterval(updateTimer, 1000);
+  </script>
+</body>
+</html>
