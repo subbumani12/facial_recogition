@@ -63,7 +63,7 @@
         <button onclick="logout()">Logout</button>
     </div>
     <h1>Security Camera Live Stream</h1>
-    <video id="videoStream" width="640" height="480" autoplay></video>
+    <img id="videoStream" src="http://localhost:5000/video_feed" width="640" height="480" alt="Live Stream">
     <br>
     <script>
         if(localStorage.getItem("loggedIn") !== "true") {
@@ -76,15 +76,6 @@
             localStorage.removeItem("loggedIn");
             window.location.href = "index.html";
         }
-        
-        // Access the user's camera
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => {
-                document.getElementById("videoStream").srcObject = stream;
-            })
-            .catch(error => {
-                console.error("Error accessing camera:", error);
-            });
     </script>
 </body>
 </html>
