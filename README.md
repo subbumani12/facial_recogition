@@ -1,3 +1,3 @@
 ﻿# Facial recogition
 
-Making an AI model to allow facial verification thus giving access to a security system.
+Making an AI model to allow Facial Verification thus giving access to a security system developed in Arduino
